@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1120" viewBox="0 0 1500 1120" role="img" aria-labelledby="diagram-title diagram-description" font-family="Arial, Helvetica, sans-serif">
+  <title id="diagram-title">ShopLedger architecture and order flow</title>
+  <desc id="diagram-description">The browser connects to the Express server and its four API routers. All ten library modules, the configuration file, and the JSON database are shown. The highlighted invoice module receives a separate request and recalculates figures for the printable invoice.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" viewBox="0 0 7 7">
+      <path d="M0 0 L7 3.5 L0 7 Z" fill="#71849c"/>
+    </marker>
+    <marker id="invoice-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" viewBox="0 0 7 7">
+      <path d="M0 0 L7 3.5 L0 7 Z" fill="#8e520a"/>
+    </marker>
+    <style>
+      text { fill: #14243b; }
+      .title { font-size: 38px; font-weight: 700; }
+      .section { font-size: 23px; font-weight: 700; }
+      .node { fill: #fff; stroke: #c1cddd; stroke-width: 1.5; }
+      .entry { fill: #edf5ff; stroke: #9ebadd; }
+      .route { fill: #f4f7fb; }
+      .node-title { font-size: 17px; font-weight: 700; text-anchor: middle; }
+      .detail { fill: #455a72; font-size: 15px; text-anchor: middle; }
+      .edge { fill: none; stroke: #71849c; stroke-width: 2; stroke-linejoin: round; }
+      .invoice-edge { stroke: #8e520a; }
+      .invoice-label { fill: #744106; }
+      .step-heading { font-size: 20px; font-weight: 700; }
+      .step-body { fill: #354d67; font-size: 16px; }
+      .step-num { fill: #fff; font-size: 16px; font-weight: 700; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <rect width="1500" height="1120" fill="#fff"/>
+  <text x="48" y="75" class="title">ShopLedger architecture</text>
+  <text x="48" y="125" class="section">Application modules</text>
+
+  <!-- Connections are laid out in the spaces between modules. -->
+  <g class="edge">
+    <path d="M513 213 V256" marker-end="url(#arrow)"/>
+    <path d="M513 327 V360 M157 360 H844"/>
+    <path d="M157 360 V394" marker-end="url(#arrow)"/>
+    <path d="M386 360 V394" marker-end="url(#arrow)"/>
+    <path d="M615 360 V394" marker-end="url(#arrow)"/>
+    <path d="M844 360 V394" marker-end="url(#arrow)"/>
+    <path d="M157 460 V516" marker-end="url(#arrow)"/>
+    <path d="M386 460 V516" marker-end="url(#arrow)"/>
+    <path d="M615 460 V516" marker-end="url(#arrow)"/>
+    <path d="M844 460 V516" marker-end="url(#arrow)"/>
+    <path d="M386 576 V600" marker-end="url(#arrow)"/>
+    <path d="M490 428 H502 V714 H492" marker-end="url(#arrow)"/>
+    <path d="M386 742 V756 H157 V774" marker-end="url(#arrow)"/>
+    <path d="M386 756 V774" marker-end="url(#arrow)"/>
+    <path d="M844 576 V620" marker-end="url(#arrow)"/>
+    <path d="M700 292 H970 V654 H950" class="invoice-edge" marker-end="url(#invoice-arrow)"/>
+    <path d="M386 989 V1012" marker-end="url(#arrow)"/>
+  </g>
+  <text x="835" y="278" class="detail invoice-label">GET /orders/:id/invoice</text>
+
+  <g>
+    <rect x="326" y="145" width="374" height="68" rx="10" class="node entry"/>
+    <text x="513" y="173" class="node-title">Browser UI</text>
+    <text x="513" y="195" class="detail">public/index.html · public/js/app.js</text>
+
+    <rect x="326" y="258" width="374" height="69" rx="10" class="node entry"/>
+    <text x="513" y="286" class="node-title">server.js</text>
+    <text x="513" y="308" class="detail">Express · static assets · /api</text>
+  </g>
+
+  <g>
+    <rect x="53" y="396" width="208" height="64" rx="9" class="node route"/>
+    <text x="157" y="423" class="node-title">routes/products.js</text>
+    <text x="157" y="444" class="detail">Catalog and coupons</text>
+
+    <rect x="282" y="396" width="208" height="64" rx="9" class="node route"/>
+    <text x="386" y="423" class="node-title">routes/orders.js</text>
+    <text x="386" y="444" class="detail">Orders and cancellations</text>
+
+    <rect x="511" y="396" width="208" height="64" rx="9" class="node route"/>
+    <text x="615" y="423" class="node-title">routes/customers.js</text>
+    <text x="615" y="444" class="detail">Customers · settlements</text>
+
+    <rect x="740" y="396" width="208" height="64" rx="9" class="node route"/>
+    <text x="844" y="423" class="node-title">routes/reports.js</text>
+    <text x="844" y="444" class="detail">Reports, preview, export</text>
+  </g>
+
+  <g>
+    <rect x="53" y="518" width="208" height="58" rx="9" class="node"/>
+    <text x="157" y="543" class="node-title">lib/inventory.js</text>
+    <text x="157" y="563" class="detail">Sellable stock</text>
+
+    <rect x="282" y="518" width="208" height="58" rx="9" class="node"/>
+    <text x="386" y="543" class="node-title">lib/orders.js</text>
+    <text x="386" y="563" class="detail">Order records</text>
+
+    <rect x="511" y="518" width="208" height="58" rx="9" class="node"/>
+    <text x="615" y="543" class="node-title">lib/ledger.js</text>
+    <text x="615" y="563" class="detail">Khata balances</text>
+
+    <rect x="740" y="518" width="208" height="58" rx="9" class="node"/>
+    <text x="844" y="543" class="node-title">lib/reports.js</text>
+    <text x="844" y="563" class="detail">GST reconciliation</text>
+
+    <rect x="282" y="602" width="208" height="56" rx="9" class="node"/>
+    <text x="386" y="626" class="node-title">lib/dates.js</text>
+    <text x="386" y="646" class="detail">Order dates</text>
+
+    <rect x="740" y="622" width="208" height="65" rx="9" fill="#fff0d4" stroke="#ad6813" stroke-width="2.5"/>
+    <text x="844" y="650" class="node-title invoice-label">lib/invoice.js</text>
+    <text x="844" y="673" class="detail invoice-label">Printable GST invoice</text>
+
+    <rect x="282" y="686" width="208" height="56" rx="9" class="node"/>
+    <text x="386" y="710" class="node-title">lib/pricing.js</text>
+    <text x="386" y="730" class="detail">Checkout totals</text>
+
+    <rect x="53" y="776" width="208" height="56" rx="9" class="node"/>
+    <text x="157" y="800" class="node-title">lib/coupons.js</text>
+    <text x="157" y="820" class="detail">Coupon rules</text>
+
+    <rect x="282" y="776" width="208" height="56" rx="9" class="node"/>
+    <text x="386" y="800" class="node-title">lib/tax.js</text>
+    <text x="386" y="820" class="detail">HSN slabs and GST split</text>
+  </g>
+
+  <path d="M48 869 H948" stroke="#dce4ee"/>
+  <text x="48" y="907" class="section">Storage and configuration</text>
+  <g>
+    <rect x="282" y="927" width="208" height="62" rx="9" class="node"/>
+    <text x="386" y="954" class="node-title">lib/store.js</text>
+    <text x="386" y="975" class="detail">Read, write, append audit</text>
+
+    <rect x="511" y="927" width="208" height="62" rx="9" class="node"/>
+    <text x="615" y="954" class="node-title">config.js</text>
+    <text x="615" y="975" class="detail">Shop, GST, coupon rules</text>
+
+    <rect x="282" y="1014" width="208" height="62" rx="9" class="node route"/>
+    <text x="386" y="1041" class="node-title">data/db.json</text>
+    <text x="386" y="1062" class="detail">Orders, stock, Khata, audit</text>
+  </g>
+
+  <rect x="995" y="113" width="457" height="963" rx="16" fill="#f5f8fc" stroke="#d7e1ee" stroke-width="1.5"/>
+  <text x="1020" y="153" class="section">Placing an order</text>
+  <rect x="1010" y="899" width="427" height="156" rx="10" fill="#fff0d4" stroke="#dfbb80"/>
+  <path d="M1033 219 V305 M1033 340 V426 M1033 461 V547 M1033 582 V668 M1033 703 V789 M1033 824 V899" stroke="#bccbde" stroke-width="2" fill="none"/>
+
+  <g>
+    <circle cx="1033" cy="202" r="17" fill="#28547f"/>
+    <text x="1033" y="208" class="step-num">1</text>
+    <text x="1063" y="209" class="step-heading">Preview the cart</text>
+    <text x="1063" y="236" class="step-body"><tspan x="1063">updateCartPreview() sends</tspan><tspan x="1063" dy="23">POST /api/pricing/preview.</tspan><tspan x="1063" dy="23">pricing.computeTotals() returns a preview.</tspan></text>
+  </g>
+
+  <g>
+    <circle cx="1033" cy="323" r="17" fill="#28547f"/>
+    <text x="1033" y="329" class="step-num">2</text>
+    <text x="1063" y="330" class="step-heading">Submit the order</text>
+    <text x="1063" y="357" class="step-body"><tspan x="1063">POST /api/orders calls store.read().</tspan><tspan x="1063" dy="23">inventory.find() resolves catalog lines</tspan><tspan x="1063" dy="23">and inventory.check() checks stock.</tspan></text>
+  </g>
+
+  <g>
+    <circle cx="1033" cy="444" r="17" fill="#28547f"/>
+    <text x="1033" y="450" class="step-num">3</text>
+    <text x="1063" y="451" class="step-heading">Calculate the payable total</text>
+    <text x="1063" y="478" class="step-body"><tspan x="1063">coupons.validate() checks the coupon.</tspan><tspan x="1063" dy="23">pricing.computeTotals() prorates the discount,</tspan><tspan x="1063" dy="23">then applies GST via tax.getRateForItem().</tspan></text>
+  </g>
+
+  <g>
+    <circle cx="1033" cy="565" r="17" fill="#28547f"/>
+    <text x="1033" y="571" class="step-num">4</text>
+    <text x="1063" y="572" class="step-heading">Charge Khata if selected</text>
+    <text x="1063" y="599" class="step-body"><tspan x="1063">ledger.chargeOrderToKhata() checks the</tspan><tspan x="1063" dy="23">account and adds the payable total.</tspan></text>
+  </g>
+
+  <g>
+    <circle cx="1033" cy="686" r="17" fill="#28547f"/>
+    <text x="1033" y="692" class="step-num">5</text>
+    <text x="1063" y="693" class="step-heading">Deduct stock and save</text>
+    <text x="1063" y="720" class="step-body"><tspan x="1063">inventory.reserve() deducts physical stock.</tspan><tspan x="1063" dy="23">orders.add() creates the order record.</tspan><tspan x="1063" dy="23">store.appendAudit() and store.write() follow.</tspan></text>
+  </g>
+
+  <g>
+    <circle cx="1033" cy="807" r="17" fill="#28547f"/>
+    <text x="1033" y="813" class="step-num">6</text>
+    <text x="1063" y="814" class="step-heading">Confirm the order</text>
+    <text x="1063" y="841" class="step-body"><tspan x="1063">HTTP 201 returns the saved order.</tspan><tspan x="1063" dy="23">The browser shows its total and invoice link.</tspan></text>
+  </g>
+
+  <g>
+    <circle cx="1033" cy="928" r="17" fill="#8e520a"/>
+    <text x="1033" y="934" class="step-num">7</text>
+    <text x="1063" y="935" class="step-heading invoice-label">Open the invoice</text>
+    <text x="1063" y="962" class="step-body"><tspan x="1063">GET /orders/:id/invoice calls orders.get().</tspan><tspan x="1063" dy="23">invoice.render() calls computeInvoiceFigures()</tspan><tspan x="1063" dy="23">to recalculate figures for the printable HTML.</tspan></text>
+  </g>
+</svg>
